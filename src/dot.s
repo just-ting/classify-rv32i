@@ -38,14 +38,20 @@ loop_start:
     bge t1, a2, loop_end
     # TODO: Add your own implementation
 	mv t2, a3
-	bge zero, t2, stride0_mul_done
-	add t3, t3, t1  
-	addi t2, t2, -1
+	li t3, 0
+	stride0_mul:
+		bge zero, t2, stride0_mul_done
+		add t3, t3, t1  
+		addi t2, t2, -1
+		j stride0_mul
 	stride0_mul_done:
+		li t3, 0
 		mv t2, a4
+	stride1_mul:
 		bge zero, t2, stride1_mul_done
 		add t4, t4, t1
 		addi t2, t2, -1
+		j stride1_mul
 	stride1_mul_done:
 		slli t3, t3, 2 
 		slli t4, t4, 2
