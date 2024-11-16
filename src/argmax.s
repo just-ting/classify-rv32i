@@ -24,14 +24,26 @@
 argmax:
     li t6, 1
     blt a1, t6, handle_error
-
     lw t0, 0(a0)
-
-    li t1, 0
-    li t2, 1
+    li t1, 0 # index of first element
+    li t2, 1 # index of second element
 loop_start:
     # TODO: Add your own implementation
-
+	slli t3, t2, 2
+	add t3, t3, a0
+	lw t4, 0(t3)
+	bgt t4, t0, change_max
+	addi t2, t2, 1
+	blt t2, a1, loop_start
+	jrl ra, loop_end
+	change_max:
+		mv t1, t2
+		j loop_start
+loop_end:
+    # Return the index of the first maximum value
+    mv a0, t1
+    jr ra
 handle_error:
     li a0, 36
     j exit
+
