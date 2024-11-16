@@ -45,7 +45,7 @@ loop_start:
 		addi t2, t2, -1
 		j stride0_mul
 	stride0_mul_done:
-		li t3, 0
+		li t4, 0
 		mv t2, a4
 	stride1_mul:
 		bge zero, t2, stride1_mul_done
