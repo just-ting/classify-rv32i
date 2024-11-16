@@ -31,12 +31,38 @@ dot:
     blt a3, t0, error_terminate   
     blt a4, t0, error_terminate  
 
-    li t0, 0            
-    li t1, 0         
+    li t0, 0  # result           
+    li t1, 0  # index         
 
 loop_start:
     bge t1, a2, loop_end
     # TODO: Add your own implementation
+	mv t2, a3
+	bge zero, t2, stride0_mul_done
+	add t3, t3, t1  
+	addi t2, t2, -1
+	stride0_mul_done:
+		mv t2, a4
+		bge zero, t2, stride1_mul_done
+		add t4, t4, t1
+		addi t2, t2, -1
+	stride1_mul_done:
+		slli t3, t3, 2 
+		slli t4, t4, 2
+		add t3, t3, a0 # t3 = a0 + (i * stride0 * 4)
+		add t4, t4, a1 # t4 = a1 + (i * stride1 * 4)
+		lw t5, 0(t3)
+		lw t6, 0(t4)
+	li t2, 0
+	mul_loop:
+		bge t2, t6, mul_done
+		add t0, t0, t5
+		addi t2, t2, 1
+		j mul_loop
+
+	mul_done:
+		addi t1, t1, 1
+		j loop_start
 
 loop_end:
     mv a0, t0
