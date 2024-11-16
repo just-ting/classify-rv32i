@@ -32,13 +32,14 @@ loop_start:
 	slli t3, t2, 2
 	add t3, t3, a0
 	lw t4, 0(t3)
-	bgt t4, t0, change_max
-	addi t2, t2, 1
-	blt t2, a1, loop_start
-	jrl ra, loop_end
+	bge t0, t4, next_step  # if t0 >= t4 then next_step
 	change_max:
 		mv t1, t2
-		j loop_start
+	next_step:
+		addi t2, t2, 1
+		blt t2, a1, loop_start
+	jrl ra, loop_end
+
 loop_end:
     # Return the index of the first maximum value
     mv a0, t1
