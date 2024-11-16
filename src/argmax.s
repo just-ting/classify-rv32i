@@ -38,7 +38,7 @@ loop_start:
 		mv t1, t2
 	next_step:
 		addi t2, t2, 1
-		blt t2, a1, loop_start
+		j loop_start
 
 loop_end:
     # Return the index of the first maximum value
