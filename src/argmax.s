@@ -29,6 +29,7 @@ argmax:
     li t2, 1 # index of second element
 loop_start:
     # TODO: Add your own implementation
+	bge t2, a1, loop_end
 	slli t3, t2, 2
 	add t3, t3, a0
 	lw t4, 0(t3)
@@ -38,7 +39,6 @@ loop_start:
 	next_step:
 		addi t2, t2, 1
 		blt t2, a1, loop_start
-	j loop_end
 
 loop_end:
     # Return the index of the first maximum value
