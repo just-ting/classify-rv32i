@@ -34,6 +34,18 @@
 # Memory Note:
 #   Caller is responsible for freeing returned matrix pointer
 # ==============================================================================
+
+#|-----------------| <- sp
+#|      ra         | <- 0(sp)
+#|      s0         | <- 4(sp)
+#|      s1         | <- 8(sp)
+#|      s2         | <- 12(sp)
+#|      s3         | <- 16(sp)
+#|      s4         | <- 20(sp)
+#| columns (t1)    | <- 28(sp)
+#| rows (t2)       | <- 32(sp)
+#|-----------------|
+
 read_matrix:
     
     # Prologue
@@ -76,12 +88,7 @@ read_matrix:
 
     # mul s1, t1, t2   # s1 is number of elements
     # FIXME: Replace 'mul' with your own implementation
-	li s1, 0
-	li t3, 0
-	mul_loop:
-		add s1. s1. t2
-		addi t3, t3, 1
-		bne t3, t1, mul_loop
+	jal mul_func
 
     slli t3, s1, 2
     sw t3, 24(sp)    # size in bytes
@@ -149,3 +156,31 @@ error_exit:
     lw s4, 20(sp)
     addi sp, sp, 40
     j exit
+
+mul_func:
+	# Prologue
+	addi sp, sp, -16
+	sw s0, 0(sp)
+	sw a0, 4(sp)
+	sw a1, 8(sp)
+	sw t0, 12(sp)
+
+	mv a0, t1  # num rows
+	mv a1, t2  # num columns
+	li s0, 0
+	li t0, 0  # counter
+
+mul_loop:
+	add s0, s0, a1
+	addi t0, t0, 1
+	bne t0, a0, mul_func
+
+	# store resullt
+	mv s1, s0
+	# Epilogue
+	lw s0, 0(sp)
+	lw a0, 4(sp)
+	lw a1, 8(sp)
+	lw t0, 12(sp)
+	addi sp, sp, 16
+	ret
