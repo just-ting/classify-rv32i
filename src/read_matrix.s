@@ -180,14 +180,16 @@ mul_func:
 	sw s0, 0(sp)
 	li s0, 0  # tmp
 	li t0, 0  # counter
+	bge t0, a0, mul_loop_end 
 
 	mul_loop:
 		add s0, s0, a1
 		addi t0, t0, 1
 		blt t0, a0, mul_func
 
-	# store resullt
-	mv a0, s0
-	lw s0, 0(sp)
-	addi sp, sp, 4
-	ret
+	mul_loop_end: 
+		# store resullt
+		mv a0, s0
+		lw s0, 0(sp)
+		addi sp, sp, 4
+		ret
