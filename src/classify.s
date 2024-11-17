@@ -456,8 +456,8 @@ mul_func:
 	addi sp, sp, -4
 	sw s0, 0(sp)
 	li s0, 0  # tmp
-	li t2, 0  # counter
-	bge t2, a0, mul_loop_end 
+	li t0, 0  # counter
+	bge t0, a0, mul_loop_end 
 
 	mul_loop:
 		add s0, s0, a1
