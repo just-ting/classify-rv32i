@@ -171,16 +171,16 @@ classify:
 	sw ra, 0(sp)
 	sw a0, 4(sp)  # number of rows
 	sw a1, 8(sp)  # number of cols
-	sw s1, 12(sp) # return
+	sw a2, 12(sp) # return
 	sw t0, 16(sp) # counter
 	mv a0, t0
 	mv a1, t1
 	jal ra, mul_func
-	mv a0, s1
+	mv a0, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
 	lw a1, 8(sp)
-	lw s1, 12(sp)
+	lw a2, 12(sp)
 	lw t0, 16(sp)
 	addi sp, sp, 20
 
@@ -226,16 +226,16 @@ classify:
 	sw ra, 0(sp)
 	sw a0, 4(sp)  # number of rows
 	sw a1, 8(sp)  # number of cols
-	sw s1, 12(sp) # return
+	sw a2, 12(sp) # return
 	sw t0, 16(sp) # counter
 	mv a0, t0
 	mv a1, t1
 	jal ra, mul_func
-	mv a1, s1
+	mv a1, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
 	lw a1, 8(sp)
-	lw s1, 12(sp)
+	lw a2, 12(sp)
 	lw t0, 16(sp)
 	addi sp, sp, 20
     
@@ -264,16 +264,16 @@ classify:
 	sw ra, 0(sp)
 	sw a0, 4(sp)  # number of rows
 	sw a1, 8(sp)  # number of cols
-	sw s1, 12(sp) # return
+	sw a2, 12(sp) # return
 	sw t0, 16(sp) # counter
 	mv a0, t0
 	mv a1, t1
 	jal ra, mul_func
-	mv a0, s1
+	mv a0, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
 	lw a1, 8(sp)
-	lw s1, 12(sp)
+	lw a2, 12(sp)
 	lw t0, 16(sp)
 	addi sp, sp, 20
 
@@ -342,16 +342,16 @@ classify:
 	sw ra, 0(sp)
 	sw a0, 4(sp)  # number of rows
 	sw a1, 8(sp)  # number of cols
-	sw s1, 12(sp) # return
+	sw a2, 12(sp) # return
 	sw t0, 16(sp) # counter
 	mv a0, t0
 	mv a1, t1
 	jal ra, mul_func
-	mv a1, s1
+	mv a1, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
 	lw a1, 8(sp)
-	lw s1, 12(sp)
+	lw a2, 12(sp)
 	lw t0, 16(sp)
 	addi sp, sp, 20
     
@@ -466,7 +466,7 @@ mul_func:
 
 	mul_loop_end: 
 		# store resullt
-		mv s1, s0
+		mv a2, s0
 		lw s0, 0(sp)
 		addi sp, sp, 4
 		ret
