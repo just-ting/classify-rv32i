@@ -167,7 +167,7 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s8)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
+    addi sp, sp, -12
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
@@ -177,7 +177,6 @@ classify:
 	lw a0, 4(sp)
 	lw t0, 8(sp)
 	addi sp, sp, 12
-
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -216,7 +215,7 @@ classify:
     lw t1, 0(s8)
     # mul a1, t0, t1 # length of h array and set it as second argument
     # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
+    addi sp, sp, -12
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
@@ -226,7 +225,6 @@ classify:
 	lw a0, 4(sp)
 	lw t0, 8(sp)
 	addi sp, sp, 12
-    
     jal relu
     
     lw a0, 0(sp)
@@ -248,7 +246,7 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s6)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
+    addi sp, sp, -12
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
@@ -258,7 +256,6 @@ classify:
 	lw a0, 4(sp)
 	lw t0, 8(sp)
 	addi sp, sp, 12
-
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -320,7 +317,7 @@ classify:
     lw t1, 0(s6)
     # mul a1, t0, t1 # load length of array into second arg
     # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
+    addi sp, sp, -12
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
@@ -419,14 +416,6 @@ epilouge:
     
     jr ra
 
-error_args:
-    li a0, 31
-    j exit
-
-error_malloc:
-    li a0, 26
-    j exit
-
 mul_func:
 	# Prologue
 	addi sp, sp, -4
@@ -446,3 +435,10 @@ mul_func:
 		lw s0, 0(sp)
 		addi sp, sp, 4
 		ret
+error_args:
+    li a0, 31
+    j exit
+
+error_malloc:
+    li a0, 26
+    j exit
