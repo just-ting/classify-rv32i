@@ -105,6 +105,7 @@ read_matrix:
 	lw t1, 16(sp)
 	lw t2, 20(sp)
 	addi sp, sp, 24
+	mv s1, a0
 
     slli t3, s1, 2
     sw t3, 24(sp)    # size in bytes
@@ -186,7 +187,7 @@ mul_func:
 		blt t0, a0, mul_func
 
 	# store resullt
-	mv s1, s0
+	mv a0, s0
 	lw s0, 0(sp)
-	addi sp, sp, 40
+	addi sp, sp, 4
 	ret
