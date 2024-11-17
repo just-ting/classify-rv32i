@@ -88,7 +88,23 @@ read_matrix:
 
     # mul s1, t1, t2   # s1 is number of elements
     # FIXME: Replace 'mul' with your own implementation
-	jal mul_func
+	addi sp, sp, -24
+	sw ra, 0(sp)
+	sw a0, 4(sp)
+	sw a1, 8(sp)
+	sw t0, 12(sp)
+	sw t1, 16(sp)
+	sw t2, 20(sp)
+	mv a0, t1  # num rows
+	mv a1, t2  # num columns
+	jal ra, mul_func
+	lw ra, 0(sp)
+	lw a0, 4(sp)
+	lw a1, 8(sp)
+	lw t0, 12(sp)
+	lw t1, 16(sp)
+	lw t2, 20(sp)
+	addi sp, sp, 24
 
     slli t3, s1, 2
     sw t3, 24(sp)    # size in bytes
@@ -159,28 +175,18 @@ error_exit:
 
 mul_func:
 	# Prologue
-	addi sp, sp, -16
+	addi sp, sp, -4
 	sw s0, 0(sp)
-	sw a0, 4(sp)
-	sw a1, 8(sp)
-	sw t0, 12(sp)
-
-	mv a0, t1  # num rows
-	mv a1, t2  # num columns
-	li s0, 0
+	li s0, 0  # tmp
 	li t0, 0  # counter
 
-mul_loop:
-	add s0, s0, a1
-	addi t0, t0, 1
-	bne t0, a0, mul_func
+	mul_loop:
+		add s0, s0, a1
+		addi t0, t0, 1
+		blt t0, a0, mul_func
 
 	# store resullt
 	mv s1, s0
-	# Epilogue
 	lw s0, 0(sp)
-	lw a0, 4(sp)
-	lw a1, 8(sp)
-	lw t0, 12(sp)
-	addi sp, sp, 16
+	addi sp, sp, 40
 	ret
