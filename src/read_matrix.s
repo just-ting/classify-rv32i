@@ -98,6 +98,7 @@ read_matrix:
 	mv a0, t1  # num rows
 	mv a1, t2  # num columns
 	jal ra, mul_func
+	mv s1, a0
 	lw ra, 0(sp)
 	lw a0, 4(sp)
 	lw a1, 8(sp)
@@ -105,7 +106,6 @@ read_matrix:
 	lw t1, 16(sp)
 	lw t2, 20(sp)
 	addi sp, sp, 24
-	mv s1, a0
 
     slli t3, s1, 2
     sw t3, 24(sp)    # size in bytes
