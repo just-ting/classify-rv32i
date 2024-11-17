@@ -185,7 +185,7 @@ mul_func:
 	mul_loop:
 		add s0, s0, a1
 		addi t0, t0, 1
-		blt t0, a0, mul_func
+		blt t0, a0, mul_loop
 
 	mul_loop_end: 
 		# store resullt
