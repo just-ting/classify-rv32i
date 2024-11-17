@@ -167,22 +167,16 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s8)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -20
+	addi sp, sp, -12
 	sw ra, 0(sp)
-	sw a0, 4(sp)  # number of rows
-	sw a1, 8(sp)  # number of cols
-	sw a2, 12(sp) # return
-	sw t0, 16(sp) # counter
-	mv a0, t0
-	mv a1, t1
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
 	jal ra, mul_func
 	mv a0, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
-	lw a1, 8(sp)
-	lw a2, 12(sp)
-	lw t0, 16(sp)
-	addi sp, sp, 20
+	lw t0, 8(sp)
+	addi sp, sp, 12
 
     slli a0, a0, 2
     jal malloc 
@@ -222,22 +216,16 @@ classify:
     lw t1, 0(s8)
     # mul a1, t0, t1 # length of h array and set it as second argument
     # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -20
+	addi sp, sp, -12
 	sw ra, 0(sp)
-	sw a0, 4(sp)  # number of rows
-	sw a1, 8(sp)  # number of cols
-	sw a2, 12(sp) # return
-	sw t0, 16(sp) # counter
-	mv a0, t0
-	mv a1, t1
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
 	jal ra, mul_func
 	mv a1, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
-	lw a1, 8(sp)
-	lw a2, 12(sp)
-	lw t0, 16(sp)
-	addi sp, sp, 20
+	lw t0, 8(sp)
+	addi sp, sp, 12
     
     jal relu
     
@@ -260,22 +248,16 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s6)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -20
+	addi sp, sp, -12
 	sw ra, 0(sp)
-	sw a0, 4(sp)  # number of rows
-	sw a1, 8(sp)  # number of cols
-	sw a2, 12(sp) # return
-	sw t0, 16(sp) # counter
-	mv a0, t0
-	mv a1, t1
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
 	jal ra, mul_func
 	mv a0, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
-	lw a1, 8(sp)
-	lw a2, 12(sp)
-	lw t0, 16(sp)
-	addi sp, sp, 20
+	lw t0, 8(sp)
+	addi sp, sp, 12
 
     slli a0, a0, 2
     jal malloc 
@@ -338,22 +320,16 @@ classify:
     lw t1, 0(s6)
     # mul a1, t0, t1 # load length of array into second arg
     # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -20
+	addi sp, sp, -12
 	sw ra, 0(sp)
-	sw a0, 4(sp)  # number of rows
-	sw a1, 8(sp)  # number of cols
-	sw a2, 12(sp) # return
-	sw t0, 16(sp) # counter
-	mv a0, t0
-	mv a1, t1
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
 	jal ra, mul_func
 	mv a1, a2
 	lw ra, 0(sp)
 	lw a0, 4(sp)
-	lw a1, 8(sp)
-	lw a2, 12(sp)
-	lw t0, 16(sp)
-	addi sp, sp, 20
+	lw t0, 8(sp)
+	addi sp, sp, 12
     
     jal argmax
     
@@ -456,13 +432,13 @@ mul_func:
 	addi sp, sp, -4
 	sw s0, 0(sp)
 	li s0, 0  # tmp
-	li t0, 0  # counter
-	bge t0, a0, mul_loop_end 
+	li t2, 0  # counter
+	bge t2, t0, mul_loop_end 
 
 	mul_loop:
-		add s0, s0, a1
-		addi t0, t0, 1
-		blt t0, a0, mul_loop
+		add s0, s0, t1
+		addi t2, t2, 1
+		blt t2, t0, mul_loop
 
 	mul_loop_end: 
 		# store resullt
