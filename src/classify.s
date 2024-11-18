@@ -1,4 +1,5 @@
 .globl classify
+
 .text
 # =====================================
 # NEURAL NETWORK CLASSIFIER
@@ -165,27 +166,18 @@ classify:
     
     lw t0, 0(s3)
     lw t1, 0(s8)
-    # mul a0, t0, t1 
-    # FIXME: Replace 'mul' with your own implementation
-    addi sp, sp, -28
-    sw ra, 0(sp)
-    sw a1, 4(sp)
-    sw t0, 8(sp)
-    sw t1, 12(sp)
-    sw t2, 16(sp)
-    sw t3, 20(sp)
-    sw t4, 24(sp)
-    mv a0, t0
-    mv a1, t1
-    jal ra, func_mul
-    lw ra, 0(sp)
-    lw a1, 4(sp)
-    lw t0, 8(sp)
-    lw t1, 12(sp)
-    lw t2, 16(sp)
-    lw t3, 20(sp)
-    lw t4, 24(sp)
-    addi sp, sp, 28
+    # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
+	addi sp, sp, -12
+	sw ra, 0(sp)
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
+	jal ra, mul_func
+	mv a0, a2
+	lw ra, 0(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
+	addi sp, sp, 12
+
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -224,26 +216,16 @@ classify:
     lw t1, 0(s8)
     # mul a1, t0, t1 # length of h array and set it as second argument
     # FIXME: Replace 'mul' with your own implementation
-    addi sp, sp, -28
-    sw ra, 0(sp)
-    sw a0, 4(sp)
-    sw t0, 8(sp)
-    sw t1, 12(sp)
-    sw t2, 16(sp)
-    sw t3, 20(sp)
-    sw t4, 24(sp)
-    mv a0, t0
-    mv a1, t1
-    jal ra, func_mul
-    mv a1, a0
-    lw ra, 0(sp)
-    lw a0, 4(sp)
-    lw t0, 8(sp)
-    lw t1, 12(sp)
-    lw t2, 16(sp)
-    lw t3, 20(sp)
-    lw t4, 24(sp)
-    addi sp, sp, 28
+	addi sp, sp, -12
+	sw ra, 0(sp)
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
+	jal ra, mul_func
+	mv a1, a2
+	lw ra, 0(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
+	addi sp, sp, 12
     
     jal relu
     
@@ -266,25 +248,17 @@ classify:
     lw t0, 0(s3)
     lw t1, 0(s6)
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-    addi sp, sp, -28
-    sw ra, 0(sp)
-    sw a1, 4(sp)
-    sw t0, 8(sp)
-    sw t1, 12(sp)
-    sw t2, 16(sp)
-    sw t3, 20(sp)
-    sw t4, 24(sp)
-    mv a0, t0
-    mv a1, t1
-    jal ra, func_mul
-    lw ra, 0(sp)
-    lw a1, 4(sp)
-    lw t0, 8(sp)
-    lw t1, 12(sp)
-    lw t2, 16(sp)
-    lw t3, 20(sp)
-    lw t4, 24(sp)
-    addi sp, sp, 28
+	addi sp, sp, -12
+	sw ra, 0(sp)
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
+	jal ra, mul_func
+	mv a0, a2
+	lw ra, 0(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
+	addi sp, sp, 12
+
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -346,26 +320,16 @@ classify:
     lw t1, 0(s6)
     # mul a1, t0, t1 # load length of array into second arg
     # FIXME: Replace 'mul' with your own implementation
-    addi sp, sp, -28
-    sw ra, 0(sp)
-    sw a0, 4(sp)
-    sw t0, 8(sp)
-    sw t1, 12(sp)
-    sw t2, 16(sp)
-    sw t3, 20(sp)
-    sw t4, 24(sp)
-    mv a0, t0
-    mv a1, t1
-    jal ra, func_mul
-    mv a1, a0
-    lw ra, 0(sp)
-    lw a0, 4(sp)
-    lw t0, 8(sp)
-    lw t1, 12(sp)
-    lw t2, 16(sp)
-    lw t3, 20(sp)
-    lw t4, 24(sp)
-    addi sp, sp, 28
+	addi sp, sp, -12
+	sw ra, 0(sp)
+	sw a2, 4(sp) # return
+	sw t2, 8(sp) # counter
+	jal ra, mul_func
+	mv a1, a2
+	lw ra, 0(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
+	addi sp, sp, 12
     
     jal argmax
     
@@ -455,95 +419,6 @@ epilouge:
     
     jr ra
 
-func_two_sort:
-    ####
-    # a0 : Addr(array)
-    ####
-    
-    lw t0, 0(a0)
-    lw t1, 4(a0)
-    
-    bgeu t1, t0, endSwap
-
-swap:
-    sw t1, 0(a0)
-    sw t0, 4(a0)
-
-endSwap:
-    ret
-    
-func_mul:
-    ####
-    # a0 : Multiplicand / return value
-    # a1 : Multiplier
-    # s0 : result
-    ####
-    
-    # Calle saved
-    addi sp, sp, -4
-    sw s0, 0(sp)
-    
-    # Set result = 0
-    li s0, 0
-    
-    # t0 = abs(Multiplicand)
-    srai t3, a0, 31
-    xor t0, a0, t3
-    sub t0, t0, t3
-    
-    # t1 = abs(Multplier)
-    srai t4, a1, 31
-    xor t1, a1, t4
-    sub t1, t1, t4
-    
-    # t2 = (is_result_positive) ? 0 : -1
-    xor t2, t3, t4
-    
-    ## sort t0, t1
-    # Caller saved
-    addi sp, sp, -16
-    sw ra, 12(sp)
-    sw t2, 8(sp)
-    sw t1, 4(sp)
-    sw t0, 0(sp)
-    
-    # Pass the parameters
-    addi a0, sp, 0
-    
-    # Jump to func_two_sort
-    jal ra, func_two_sort
-    ###
-    
-    # t0 < t1
-    lw t0, 0(sp)
-    lw t1, 4(sp)
-    lw t2, 8(sp)
-    
-    # Consecutive addition to implement multiplication
-    li t3, 0
-    bgeu t3, t0, endMulLoop
-    
-mulLoop:
-    add s0, s0, t1
-    addi t3, t3, 1
-    bltu t3, t0, mulLoop
-    
-endMulLoop:
-    # s0 is abs(Multiplicand * Multiplier) now
-    # According t2 to keep s0 positive or turn s0 to negative
-    xor s0, s0, t2
-    sub s0, s0, t2
-    
-    # Store return value in a0
-    mv a0, s0
-    
-    # Retrieve ra & Calle saved
-    lw ra, 12(sp)
-    lw s0, 16(sp)
-    addi sp, sp, 20
-    
-    ret
-
 error_args:
     li a0, 31
     j exit
@@ -551,4 +426,23 @@ error_args:
 error_malloc:
     li a0, 26
     j exit
-    
+
+mul_func:
+	# Prologue
+	addi sp, sp, -4
+	sw s0, 0(sp)
+	li s0, 0  # tmp
+	li t2, 0  # counter
+	bge t2, t0, mul_loop_end 
+
+	mul_loop:
+		add s0, s0, t1
+		addi t2, t2, 1
+		blt t2, t0, mul_loop
+
+	mul_loop_end: 
+		# store resullt
+		mv a2, s0
+		lw s0, 0(sp)
+		addi sp, sp, 4
+		ret
