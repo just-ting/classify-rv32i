@@ -1,3 +1,4 @@
+.import ./mul.s
 .globl classify
 
 .text
@@ -166,18 +167,20 @@ classify:
     
     lw t0, 0(s3)
     lw t1, 0(s8)
-    # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
-	sw ra, 0(sp)
-	sw a2, 4(sp) # return
-	sw t2, 8(sp) # counter
-	jal ra, mul_func
-	mv a0, a2
-	lw ra, 0(sp)
-	lw a2, 4(sp)
-	lw t2, 8(sp)
-	addi sp, sp, 12
-
+    # mul a0, t0, t1 
+    # FIXME: Replace 'mul' with your own implementation
+    # ################ FIX1 #################
+    # Prolouge
+    addi sp, sp, -4
+    sw a1, 0(sp)
+    # call mul function
+    mv a0, t0
+    mv a1, t1
+    jal mul
+    # Epilouge
+    lw a1, 0(sp)
+    addi sp, sp, 4
+    # ############# End of FIX1 #################
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
@@ -216,17 +219,20 @@ classify:
     lw t1, 0(s8)
     # mul a1, t0, t1 # length of h array and set it as second argument
     # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
-	sw ra, 0(sp)
-	sw a2, 4(sp) # return
-	sw t2, 8(sp) # counter
-	jal ra, mul_func
-	mv a1, a2
-	lw ra, 0(sp)
-	lw a2, 4(sp)
-	lw t2, 8(sp)
-	addi sp, sp, 12
-    
+    # ################ FIX2 #################
+    # Prolouge
+    addi sp, sp, -4
+    sw a0, 0(sp)
+    # call mul function
+    mv a0, t0
+    mv a1, t1
+    jal mul
+    # extract the reutrn value
+    mv a1, a0
+    # Epilouge
+    lw a0, 0(sp)
+    addi sp, sp, 4
+    # ############# End of FIX2 #################
     jal relu
     
     lw a0, 0(sp)
@@ -247,17 +253,20 @@ classify:
     
     lw t0, 0(s3)
     lw t1, 0(s6)
-    # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
-	sw ra, 0(sp)
-	sw a2, 4(sp) # return
-	sw t2, 8(sp) # counter
-	jal ra, mul_func
-	mv a0, a2
-	lw ra, 0(sp)
-	lw a2, 4(sp)
-	lw t2, 8(sp)
-	addi sp, sp, 12
+    # mul a0, t0, t1 
+    # FIXME: Replace 'mul' with your own implementation
+    # ################ FIX3 #################
+    # Prolouge
+    addi sp, sp, -4
+    sw a1, 0(sp)
+    # call mul function
+    mv a0, t0
+    mv a1, t1
+    jal mul
+    # Epilouge
+    lw a1, 0(sp)
+    addi sp, sp, 4
+    # ############# End of FIX3 #################
 
     slli a0, a0, 2
     jal malloc 
@@ -320,17 +329,20 @@ classify:
     lw t1, 0(s6)
     # mul a1, t0, t1 # load length of array into second arg
     # FIXME: Replace 'mul' with your own implementation
-	addi sp, sp, -12
-	sw ra, 0(sp)
-	sw a2, 4(sp) # return
-	sw t2, 8(sp) # counter
-	jal ra, mul_func
-	mv a1, a2
-	lw ra, 0(sp)
-	lw a2, 4(sp)
-	lw t2, 8(sp)
-	addi sp, sp, 12
-    
+    # ################ FIX4 #################
+    # Prolouge
+    addi sp, sp, -4
+    sw a0, 0(sp)
+    # call mul function
+    mv a0, t0
+    mv a1, t1
+    jal mul
+    # extract the reutrn value
+    mv a1, a0
+    # Epilouge
+    lw a0, 0(sp)
+    addi sp, sp, 4
+    # ############# End of FIX4 #################
     jal argmax
     
     mv t0, a0 # move return value of argmax into t0
@@ -426,23 +438,3 @@ error_args:
 error_malloc:
     li a0, 26
     j exit
-
-mul_func:
-	# Prologue
-	addi sp, sp, -4
-	sw s0, 0(sp)
-	li s0, 0  # tmp
-	li t2, 0  # counter
-	bge t2, t0, mul_loop_end 
-
-	mul_loop:
-		add s0, s0, t1
-		addi t2, t2, 1
-		blt t2, t0, mul_loop
-
-	mul_loop_end: 
-		# store resullt
-		mv a2, s0
-		lw s0, 0(sp)
-		addi sp, sp, 4
-		ret
