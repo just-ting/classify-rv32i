@@ -2,6 +2,14 @@
 
 ## Part A: Mathematical Functions
 ### Task 1: ReLU
+In relu.s, implement the ReLU function, which applies the transformation: 
+<style>
+.text-center{
+    `ReLU = max(a,0)`
+}
+</style>
+Each element of the input array will be individually processed by setting negative values to 0. Since the matrix is stored as a 1D row-major vector, this function operates directly on the flattened array.
+
 #### I traverse an array to check every element if it is negative. If TRUE, then change the negative one to `zero`.
 
 1. Check if the pointer to integer array points to last one.
