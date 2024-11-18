@@ -43,8 +43,6 @@ loop_start:
     li t4, 0           
     mul_loop:
         beqz t3, mul_end     
-        andi t5, t3, 1       
-        beqz t5, mul_skip_add 
         add t4, t4, t2      
     mul_skip_add:
         srli t3, t3, 1       
