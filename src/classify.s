@@ -258,7 +258,6 @@ classify:
 	lw a2, 4(sp)
 	lw t2, 8(sp)
 	addi sp, sp, 12
-
     slli a0, a0, 2
     jal malloc 
     beq a0, x0, error_malloc
