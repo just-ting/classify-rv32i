@@ -30,30 +30,30 @@ dot:
     blt a2, t0, error_terminate  
     blt a3, t0, error_terminate   
     blt a4, t0, error_terminate  
-    slli a3, a3, 2      # a3 = 4 * a3
-    slli a4, a4, 2      # a4 = 4 * a4
+    slli a3, a3, 2      
+    slli a4, a4, 2      
 
-    li t0, 0            # t0 is dot sum
-    li t1, 0            # t1 is i
+    li t0, 0 # result          
+    li t1, 0 # index
 loop_start:
     # TODO: Add your own implementation
-    lw t2, 0(a0)        # extract current arr0 element to t2
-    lw t3, 0(a1)        # extract current arr1 element to t3
-    # calculate t2 * t3
-    li t4, 0            # set mul_sum = 0
+    lw t2, 0(a0)
+    lw t3, 0(a1) 
+    
+    li t4, 0           
     mul_loop:
-        beqz t3, mul_end     # if t3 is 0, then the multiplication is done
-        andi t5, t3, 1       # check the LSB of t3 
-        beqz t5, mul_skip_add # if LSB is 0, then skip
-        add t4, t4, t2       # mul_sum += t2
-    mul_skip_add:
-        srli t3, t3, 1       # t3 >>= 1
-        slli t2, t2, 1       # t2 <<= 1
+        beqz t3, mul_end
+        andi t5, t3, 1       
+        beqz t5, mul_skip
+        add t4, t4, t2      
+    mul_skip:  
+        srli t3, t3, 1       
+        slli t2, t2, 1       
         j mul_loop
     mul_end:
     add t0, t0, t4
-    add a0, a0, a3      # move to next arr0 element
-    add a1, a1, a4      # move to next arr1 element
+    add a0, a0, a3    
+    add a1, a1, a4     
     addi t1, t1, 1
     blt t1, a2, loop_start
 
