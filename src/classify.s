@@ -174,8 +174,8 @@ classify:
 	jal ra, mul_func
 	mv a0, a2
 	lw ra, 0(sp)
-	lw a0, 4(sp)
-	lw t0, 8(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
 	addi sp, sp, 12
 
     slli a0, a0, 2
@@ -223,8 +223,8 @@ classify:
 	jal ra, mul_func
 	mv a1, a2
 	lw ra, 0(sp)
-	lw a0, 4(sp)
-	lw t0, 8(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
 	addi sp, sp, 12
     
     jal relu
@@ -255,8 +255,8 @@ classify:
 	jal ra, mul_func
 	mv a0, a2
 	lw ra, 0(sp)
-	lw a0, 4(sp)
-	lw t0, 8(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
 	addi sp, sp, 12
 
     slli a0, a0, 2
@@ -327,8 +327,8 @@ classify:
 	jal ra, mul_func
 	mv a1, a2
 	lw ra, 0(sp)
-	lw a0, 4(sp)
-	lw t0, 8(sp)
+	lw a2, 4(sp)
+	lw t2, 8(sp)
 	addi sp, sp, 12
     
     jal argmax
