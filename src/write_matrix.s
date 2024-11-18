@@ -63,29 +63,18 @@ write_matrix:
 
     # mul s4, s2, s3   # s4 = total elements
     # FIXME: Replace 'mul' with your own implementation
-    addi sp, sp, -32
-    sw ra, 0(sp)
-    sw a0, 4(sp)
-    sw a1, 8(sp)
-    sw t0, 12(sp)
-    sw t1, 16(sp)
-    sw t2, 20(sp)
-    sw t3, 24(sp)
-    sw t4, 28(sp)
-    mv a0, s2
-    mv a1, s3
-    jal func_mul
-    mv s4, a0
-    lw ra, 0(sp)
-    lw a0, 4(sp)
-    lw a1, 8(sp)
-    lw t0, 12(sp)
-    lw t1, 16(sp)
-    lw t2, 20(sp)
-    lw t3, 24(sp)
-    lw t4, 28(sp)
-    addi sp, sp, 32
-    
+	addi sp, sp, -16
+	sw ra, 0(sp)
+	sw t0, 4(sp) # counter
+	sw s2, 8(sp)  # number of rows
+	sw s3, 12(sp)  # number of columns
+	jal ra, mul_func
+	lw ra, 0(sp)
+	lw t0, 4(sp)
+	lw s2, 8(sp)
+	lw s3, 12(sp)
+	addi sp, sp, 16
+
     # write matrix data to file
     mv a0, s0
     mv a1, s1        # matrix data pointer
@@ -135,91 +124,23 @@ error_exit:
     lw s4, 20(sp)
     addi sp, sp, 44
     j exit
-   
-func_two_sort:
-    ####
-    # a0 : Addr(array)
-    ####
-    
-    lw t0, 0(a0)
-    lw t1, 4(a0)
-    
-    bgeu t1, t0, endSwap
 
-swap:
-    sw t1, 0(a0)
-    sw t0, 4(a0)
+mul_func:
+	# Prologue
+	addi sp, sp, -4
+	sw s0, 0(sp)
+	li s0, 0  # tmp
+	li t0, 0  # counter
+	bge t0, s2, mul_loop_end 
 
-endSwap:
-    ret
-func_mul:
-    ####
-    # a0 : Multiplicand / return value
-    # a1 : Multiplier
-    # s0 : result
-    ####
-    
-    # Calle saved
-    addi sp, sp, -4
-    sw s0, 0(sp)
-    
-    # Set result = 0
-    li s0, 0
-    
-    # t0 = abs(Multiplicand)
-    srai t3, a0, 31
-    xor t0, a0, t3
-    sub t0, t0, t3
-    
-    # t1 = abs(Multplier)
-    srai t4, a1, 31
-    xor t1, a1, t4
-    sub t1, t1, t4
-    
-    # t2 = (is_result_positive) ? 0 : -1
-    xor t2, t3, t4
-    
-    ## sort t0, t1
-    # Caller saved
-    addi sp, sp, -16
-    sw ra, 12(sp)
-    sw t2, 8(sp)
-    sw t1, 4(sp)
-    sw t0, 0(sp)
-    
-    # Pass the parameters
-    addi a0, sp, 0
-    
-    # Jump to func_two_sort
-    jal ra, func_two_sort
-    ###
-    
-    # t0 < t1
-    lw t0, 0(sp)
-    lw t1, 4(sp)
-    lw t2, 8(sp)
-    
-    # Consecutive addition to implement multiplication
-    li t3, 0
-    bgeu t3, t0, endMulLoop
-    
-mulLoop:
-    add s0, s0, t1
-    addi t3, t3, 1
-    bltu t3, t0, mulLoop
-    
-endMulLoop:
-    # s0 is abs(Multiplicand * Multiplier) now
-    # According t2 to keep s0 positive or turn s0 to negative
-    xor s0, s0, t2
-    sub s0, s0, t2
-    
-    # Store return value in a0
-    mv a0, s0
-    
-    # Retrieve ra & Calle saved
-    lw ra, 12(sp)
-    lw s0, 16(sp)
-    addi sp, sp, 20
-    
-    ret
+	mul_loop:
+		add s0, s0, s3
+		addi t0, t0, 1
+		blt t0, s2, mul_loop
+
+	mul_loop_end: 
+		# store resullt
+		mv s4, s0
+		lw s0, 0(sp)
+		addi sp, sp, 4
+		ret
