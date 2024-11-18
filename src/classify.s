@@ -171,7 +171,7 @@ classify:
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
-	jal mul_func
+	jal ra, mul_func
 	mv a0, a2
 	lw ra, 0(sp)
 	lw a2, 4(sp)
@@ -220,7 +220,7 @@ classify:
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
-	jal mul_func
+	jal ra, mul_func
 	mv a1, a2
 	lw ra, 0(sp)
 	lw a2, 4(sp)
@@ -252,7 +252,7 @@ classify:
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
-	jal mul_func
+	jal ra, mul_func
 	mv a0, a2
 	lw ra, 0(sp)
 	lw a2, 4(sp)
@@ -324,7 +324,7 @@ classify:
 	sw ra, 0(sp)
 	sw a2, 4(sp) # return
 	sw t2, 8(sp) # counter
-	jal mul_func
+	jal ra, mul_func
 	mv a1, a2
 	lw ra, 0(sp)
 	lw a2, 4(sp)
@@ -445,4 +445,4 @@ mul_func:
 		mv a2, s0
 		lw s0, 0(sp)
 		addi sp, sp, 4
-		ret
+		jr ra
