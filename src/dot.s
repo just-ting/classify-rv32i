@@ -36,7 +36,6 @@ dot:
     li t0, 0 # result          
     li t1, 0 # index
 loop_start:
-    bge t1, a2, loop_end
     # TODO: Add your own implementation
     lw t2, 0(a0)
     lw t3, 0(a1) 
@@ -56,6 +55,7 @@ loop_start:
     add a0, a0, a3    
     add a1, a1, a4     
     addi t1, t1, 1
+    blt t1, a2, loop_start
 
 loop_end:
     mv a0, t0
