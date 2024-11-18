@@ -30,44 +30,32 @@ dot:
     blt a2, t0, error_terminate  
     blt a3, t0, error_terminate   
     blt a4, t0, error_terminate  
-    li t0, 0  # result           
-    li t1, 0  # index         
+    slli a3, a3, 2      
+    slli a4, a4, 2      
 
+    li t0, 0 # result          
+    li t1, 0 # index
 loop_start:
     bge t1, a2, loop_end
     # TODO: Add your own implementation
-	mv t2, a3
-	li t3, 0
-	stride0_mul:
-		bge zero, t2, stride0_mul_done
-		add t3, t3, t1  
-		addi t2, t2, -1
-		j stride0_mul
-	stride0_mul_done:
-		li t4, 0
-		mv t2, a4
-	stride1_mul:
-		bge zero, t2, stride1_mul_done
-		add t4, t4, t1
-		addi t2, t2, -1
-		j stride1_mul
-	stride1_mul_done:
-		slli t3, t3, 2 
-		slli t4, t4, 2
-		add t3, t3, a0 # t3 = a0 + (i * stride0 * 4)
-		add t4, t4, a1 # t4 = a1 + (i * stride1 * 4)
-		lw t5, 0(t3)
-		lw t6, 0(t4)
-	li t2, 0
-	mul_loop:
-		bge t2, t6, mul_done
-		add t0, t0, t5
-		addi t2, t2, 1
-		j mul_loop
-
-	mul_done:
-		addi t1, t1, 1
-		j loop_start
+    lw t2, 0(a0)
+    lw t3, 0(a1) 
+    
+    li t4, 0           
+    mul_loop:
+        beqz t3, mul_end     
+        andi t5, t3, 1       
+        beqz t5, mul_skip_add 
+        add t4, t4, t2      
+    mul_skip_add:
+        srli t3, t3, 1       
+        slli t2, t2, 1       
+        j mul_loop
+    mul_end:
+    add t0, t0, t4
+    add a0, a0, a3    
+    add a1, a1, a4     
+    addi t1, t1, 1
 
 loop_end:
     mv a0, t0
