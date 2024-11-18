@@ -115,13 +115,16 @@ inner_loop_start:
     j inner_loop_start
     
 inner_loop_end:
-    # TODO: Add your own implementation
-	addi s0, s0, 1       
-    slli t1, a2, 2      
-    add s3, s3, t1      
+    
+    addi s0, s0, 1       # Increment outer loop counter s0 (move to the next row of M0)
+    slli t1, a2, 2       # Convert the column count to an address offset (each column occupies 4 bytes)
+    add s3, s3, t1       # Update s3 to point to the start of the next row in M0
+    
+    # Jump back to outer_loop_start to begin calculations for the next row
     j outer_loop_start
 
 outer_loop_end:
+    # Restore registers from the stack
     lw ra, 0(sp)
     lw s0, 4(sp)
     lw s1, 8(sp)
@@ -129,7 +132,11 @@ outer_loop_end:
     lw s3, 16(sp)
     lw s4, 20(sp)
     lw s5, 24(sp)
+    
+    # Reset stack pointer to its original position
     addi sp, sp, 28
+
+    # Return from the matmul function
     ret
 
 error:
